@@ -3,29 +3,21 @@ package main
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 )
 
-type AlphaReader struct {
-	src io.Reader
+func main() {
+	ReadD()
 }
-
-func NewAlphaReader(src io.Reader) *AlphaReader {
-	return &AlphaReader{src: src}
-}
-func (reader *AlphaReader) Read(p *[]byte) (s0 int, err error) {
-	fmt.Println(*reader)
-	for i := 0; i < len(*p); i++ {
-		if ((*reader)[i] >= 'A' && (*reader)[i] <= 'Z') || ((*reader)[i] >= 'a' && (*reader)[i] <= 'z') {
-			(*p)[i] = (*reader)[i]
-			if (*p)[i+1] == 0 {
-				return 0, io.EOF
-			}
-		}
-		s0++
+func ReadD() {
+	r := strings.NewReader("Reading....")
+	_, err := io.Copy(os.Stdout, r)
+	if err != nil {
+		fmt.Println("Error")
 	}
-
-	return s0, nil
+	_, err = io.CopyBuffer(os.Stdout, strings.NewReader("Akshat Sahijpal"), make([]byte, 8))
+	if err != nil {
+		return
+	}
 }
-
-func main() {}
