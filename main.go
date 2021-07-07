@@ -4,10 +4,27 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 func main() {
 	fileReader()
+	stringReader()
+}
+func stringReader() {
+	reader := strings.NewReader("Akshat Sahijpal")
+	buffer := make([]byte, 5)
+	for {
+		n, err := reader.Read(buffer)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if err == io.EOF {
+			return
+		}
+		fmt.Println(string(buffer[:n]))
+	}
 }
 func fileReader() {
 	file, error := os.Open("run.txt") // Open Returns pointer to the file
