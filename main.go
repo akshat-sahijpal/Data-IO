@@ -2,36 +2,26 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 )
 
 func main() {
-	fileReader()
-}
-func fileReader() {
-	file, error := os.Open("run.txt") // Open Returns pointer to the file
-	if error != nil {
-		panic(error)
+	file, err := os.OpenFile("run.txt", os.O_RDWR|os.O_TRUNC, 0600)
+	if err != nil {
+		fmt.Println("Error Loading File!!")
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			fmt.Println("Error Closing the file ", err)
+			fmt.Println("Error Closing the File!!")
 		}
 	}(file)
-
-	// Data is stored in a buffer
-	buffer := make([]byte, 10) // buffer of size 10
-	// func (f *File) Read(b []byte) (n int, err error)
-	for {
-		n, err := file.Read(buffer)
-		if err == io.EOF {
-			return
-		}
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println(string(buffer[:n]))
+	// Write the data
+	buffer := []byte("Buffered data 1")
+	_, err1 := file.Write(buffer)
+	if err1 != nil {
+		return
+	} else {
+		fmt.Println("Done!!!")
 	}
 }
