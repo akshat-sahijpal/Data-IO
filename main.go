@@ -12,7 +12,7 @@ func main() {
 	stringReader()
 }
 func stringReader() {
-	reader := strings.NewReader("Akshat Sahijpal")
+	reader := strings.NewReader("AkshatSahijpal")
 	buffer := make([]byte, 5)
 	for {
 		n, err := reader.Read(buffer)
