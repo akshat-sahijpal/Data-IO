@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -39,6 +41,33 @@ func CreateData(name, linked string, next *Data, age, dob int, time2 time.Time) 
 	}
 }
 func main() {
+	marshal, err := json.Marshal(bulkData())
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(marshal))
+	fmt.Println(GetJsonReads())
+}
+
+// GetJsonReads Reading Data
+func GetJsonReads() Data {
+	file, err := os.OpenFile("out.json", os.O_RDWR|os.O_APPEND, 0600)
+	if err != nil {
+		panic("Error Reading Json!!!!")
+	}
+	// Convert *File to bytes using ioutil
+	all, err2 := ioutil.ReadAll(file)
+	if err2 != nil {
+		panic("Error &")
+	}
+	v := Data{}
+	err1 := json.Unmarshal(all, &v)
+	if err1 != nil {
+		panic("Error")
+	}
+	return v
+}
+func bulkData() Data {
 	a := CreateData("aks", "as", nil, 20, 2001, time.Now())
 	b := CreateData("aks32", "as3", &a, 23, 2004, time.Now())
 	c := CreateData("de2", "as3d", &b, 23, 2024, time.Now())
@@ -75,9 +104,5 @@ func main() {
 	j11 := CreateData("rks32", "asef3", &i11, 323, 2204, time.Now())
 	l11 := CreateData("afrfks32", "aqs3", &j11, 233, 2204, time.Now())
 	m11 := CreateData("aksww32", "avs3", &l11, 2323, 2404, time.Now())
-	marshal, err := json.Marshal(m11)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(string(marshal))
+	return m11
 }
