@@ -47,6 +47,7 @@ func main() {
 	}
 	fmt.Println(string(marshal))
 	fmt.Println(GetJsonReads())
+	//ReadJSON()
 }
 
 // GetJsonReads Reading Data
@@ -66,6 +67,18 @@ func GetJsonReads() Data {
 		panic("Error")
 	}
 	return v
+}
+func ReadJSON() {
+	file, err := os.OpenFile("out.json", os.O_RDWR|os.O_APPEND, 0600)
+	if err != nil {
+		panic("Error Reading Json!!!!")
+	}
+	v := Data{}
+	err1 := json.NewDecoder(file).Decode(&v)
+	if err1 != nil {
+		panic("Error")
+	}
+	fmt.Println(v)
 }
 func bulkData() Data {
 	a := CreateData("aks", "as", nil, 20, 2001, time.Now())
