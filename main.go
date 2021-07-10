@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -39,14 +41,32 @@ func CreateData(name, linked string, next *Data, age, dob int, time2 time.Time) 
 	}
 }
 func main() {
-
 	marshal, err := json.Marshal(bulkData())
 	if err != nil {
 		fmt.Println(err)
 	}
 	fmt.Println(string(marshal))
+	fmt.Println(GetJsonReads())
 }
 
+// GetJsonReads Reading Data
+func GetJsonReads() Data {
+	file, err := os.OpenFile("out.json", os.O_RDWR|os.O_APPEND, 0600)
+	if err != nil {
+		panic("Error Reading Json!!!!")
+	}
+	// Convert *File to bytes using ioutil
+	all, err2 := ioutil.ReadAll(file)
+	if err2 != nil {
+		panic("Error &")
+	}
+	v := Data{}
+	err1 := json.Unmarshal(all, &v)
+	if err1 != nil {
+		panic("Error")
+	}
+	return v
+}
 func bulkData() Data {
 	a := CreateData("aks", "as", nil, 20, 2001, time.Now())
 	b := CreateData("aks32", "as3", &a, 23, 2004, time.Now())
